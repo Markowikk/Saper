@@ -1,3 +1,5 @@
+from typing import Dict, Tuple
+
 from ContentOfField import ContentOfField
 
 
@@ -20,6 +22,7 @@ class Point:
         self.y = int(y)
         self.outlook = f"|{x}:{y}|"
         self.status = status
+        self.neighbors = 0
 
     def __str__(self):
         """
@@ -31,6 +34,14 @@ class Point:
     def change_outlook(self):
         """
         Uncover the point content
-        :return:
+        :return: None
         """
         self.outlook = f"|{self.status.value}|"
+
+    def put_bomb(self):
+        self.status = ContentOfField.BOMB
+
+    def add_bomb_neighbor(self):
+        self.neighbors += 1
+        self.status = ContentOfField.ONEBOMB
+
