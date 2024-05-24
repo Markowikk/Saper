@@ -22,7 +22,15 @@ class Point:
         self.status = status
 
     def __str__(self):
+        """
+        Returns the string representation of the point
+        :return: string
+        """
         return self.outlook
 
     def change_outlook(self):
+        """
+        Uncover the point content
+        :return:
+        """
         self.outlook = f"|{self.status.value}|"

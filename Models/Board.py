@@ -23,18 +23,36 @@ class Board:
         self.board: Dict[Tuple[int, int], Point] = {}
 
     def create_board(self):
+
+        """
+        Create the new board and add it to the boards dict
+        :return: None
+        """
+
         for y in range(0, self.y):
             for x in range(0, self.x):
                 p = Point(x, y, ContentOfField.BOMB)
                 self.board[(x, y)] = p
 
     def print_board(self):
+
+        """
+        Print the board
+        :return: None
+        """
+
         for y in range(self.y):
             for x in range(self.x):
                 print(self.board[(x, y)], end='')
             print('')
 
     def check_point(self, x, y):
+        """
+        Change te status of the specific point fromt the board
+        :param x: val x of the point
+        :param y: val y of the point
+        :return: None
+        """
         try:
             p = self.board.get((x, y))
             p.change_outlook()
