@@ -1,0 +1,6 @@
+
+bomb - *
+flag - @
+mark sign - ?
+
+Save (x;y) of points, bombs etc. as a list instead of saving the whole baord.
