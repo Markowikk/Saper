@@ -1,7 +1,9 @@
+import re
 import random
 from Point import Point
 from typing import Dict, Tuple
 from ContentOfField import ContentOfField
+
 
 class Board:
     """
@@ -21,6 +23,7 @@ class Board:
         self.x = x
         self.y = y
         self.board: Dict[Tuple[int, int], Point] = {}
+        self.saveFileName = "saperSavedGame"
 
     def create_board(self):
         """
@@ -31,6 +34,33 @@ class Board:
             for x in range(0, self.x):
                 p = Point(x, y, ContentOfField.EMPTY)
                 self.board[(x, y)] = p
+
+    def save_game(self):
+        try:
+            with open(self.saveFileName, "w") as file:
+                for k, p in self.board.items():
+                    file.write(f"{p};{p.status}\n")
+                print("The game has been saved")
+        except IOError as e:
+            print(e)
+
+    def load_game(self):
+        res: Dict[Tuple[int, int], Point] = {}
+        try:
+            with open(self.saveFileName, "r") as file:
+                regexPattern = r"\|(\d+):(\d+)\|\;ContentOfField\.(\w+)"
+                for line in file:
+                    from typing import re
+                    match = re.search(regexPattern, line)
+                    if match:
+                        x = int(match.group(1))
+                        y = int(match.group(2))
+                        status = ContentOfField[match.group(3)]
+                        p = Point(x, y, status)
+                        res[(x, y)] = p
+        finally:
+            print("The game has been loaded")
+        self.board = res
 
     def print_board(self):
         """
@@ -47,9 +77,6 @@ class Board:
             while (True):
                 randomX = random.randint(0, self.x - 1)
                 randomY = random.randint(0, self.y - 1)
-                print(randomX)
-                print(randomY)
-                print("LLLLLLLLLLLLLLLL")
                 if self.board[randomX, randomY].status != ContentOfField.BOMB:
                     self.board[randomX, randomY].put_bomb()
                     self.add_bombs_to_neighbor_points(randomX, randomY)
@@ -73,8 +100,17 @@ class Board:
                     continue
                 nx = x + dx
                 ny = y + dy
-                if 0 <= nx < self.x and 0 <= ny < self.y and self.board.get((nx, ny)).status == ContentOfField.BOMB:
-                    self.board[(nx, ny)].add_bomb_neighbor()
+                if 0 <= nx < self.x and 0 <= ny < self.y:
+                    neighbor_point = self.board.get((nx, ny))
+                    if neighbor_point and neighbor_point.status != ContentOfField.BOMB:
+                        neighbor_point.add_bomb_neighbor()
+
+    def mark_point(self, x, y):
+        try:
+            self.check_point(x, y)
+        except Exception as e:
+            return
+        # dodac dawanie flagi albo zaznaczanie
 
     def get_point(self, x, y):
         """
