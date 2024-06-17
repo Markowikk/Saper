@@ -13,5 +13,5 @@ class ContentOfField(Enum):
     EIGHTBOMBS = " 8 "
     BOMB = " * "
     FLAG = " @ "
-    MARK = " ? "
+    QUESTIONMARK = " ? "
 

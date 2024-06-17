@@ -37,13 +37,28 @@ class Point:
         Uncover the point content
         :return: None
         """
-        self.outlook = f"|{self.status.value}|"
+        if self.mark is not None:
+            self.outlook = f"|{self.mark.value}|"
+        else:
+            self.outlook = f"|{self.status.value}|"
 
     def put_bomb(self):
+        """
+        Place a bomb at this point.
+
+        :return: None
+        """
         self.status = ContentOfField.BOMB
 
     def mark_point(self, content: ContentOfField):
+        """
+        Mark the point with a specific content (flag or question mark).
+
+        :param content: The mark to place on the point
+        :return: None
+        """
         self.mark = content
+        self.change_outlook()
 
     def get_status_from_neighbors(self):
         """
@@ -63,6 +78,19 @@ class Point:
         return neighbor_status_mapping[self.neighbors]
 
     def add_bomb_neighbor(self):
+        """
+        Increment the neighbor bomb count and update the status accordingly if this point is not a bomb.
+
+        :return: None
+        """
         self.neighbors += 1
         if self.status != ContentOfField.BOMB:
             self.status = self.get_status_from_neighbors()
+
+    def is_bomb(self):
+        """
+        Check if this point is a bomb.
+
+        :return: True if the point is a bomb, False otherwise
+        """
+        return self.status == ContentOfField.BOMB
